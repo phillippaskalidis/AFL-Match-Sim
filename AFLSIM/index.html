@@ -3,1665 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AFL Match Simulator</title>
+    <title>EliteWave Tiling - Professional Tiling Services in Tullamarine</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
         }
-        .team-logo {
-            width: 24px; /* smaller for ladder */
-            height: 24px;
-            object-fit: contain;
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://placehold.co/1920x1080/808080/ffffff?text=Tiling+Showcase');
+            background-size: cover;
+            background-position: center;
         }
-        #finalScoreboard .team-logo {
-            width: 64px; /* larger for scoreboard */
-            height: 64px;
+        .gallery-img {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .tab-btn.active {
-            background-color: #4f46e5;
-            color: #ffffff;
-        }
-        .mode-btn.active {
-             background-color: #16a34a;
-             border-color: #16a34a;
-        }
-        .fixture-match.active {
-            background-color: #4f46e5 !important;
+        .gallery-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
+<body class="bg-gray-50 text-gray-800">
 
-    <div class="w-full max-w-6xl bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-10 mx-auto">
-        <header class="text-center mb-8">
-            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">AFL Match Simulator</h1>
-            <div class="mt-4">
-                <button id="singleMatchModeBtn" class="mode-btn active bg-gray-700 hover:bg-green-600 border-2 border-gray-600 font-bold py-2 px-6 rounded-lg transition">Single Match</button>
-                <button id="seasonModeBtn" class="mode-btn bg-gray-700 hover:bg-green-600 border-2 border-gray-600 font-bold py-2 px-6 rounded-lg transition">Season Mode</button>
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-gray-900">
+                <i class="fas fa-th-large text-blue-600"></i> EliteWave Tiling
+            </a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="#home" class="text-gray-600 hover:text-blue-600 transition duration-300">Home</a>
+                <a href="#services" class="text-gray-600 hover:text-blue-600 transition duration-300">Services</a>
+                <a href="#gallery" class="text-gray-600 hover:text-blue-600 transition duration-300">Gallery</a>
+                <a href="#about" class="text-gray-600 hover:text-blue-600 transition duration-300">About Us</a>
+                <a href="#contact" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">Contact Us</a>
             </div>
-        </header>
-
-        <main>
-            <div id="singleMatchContainer">
-                <div class="bg-gray-700/50 rounded-xl p-6 mb-8">
-                    <h2 class="text-2xl font-bold text-center mb-6">Match Setup</h2>
-                    <div class="flex flex-col md:flex-row items-center justify-around space-y-6 md:space-y-0 md:space-x-6">
-                        <div class="flex-1 text-center">
-                            <label for="homeTeamSelect" class="block text-lg font-semibold mb-2">Home Team</label>
-                            <select id="homeTeamSelect" class="w-full bg-gray-800 border-2 border-gray-600 rounded-lg p-3 text-lg focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition"></select>
-                             <div class="mt-2 text-left">
-                                <label class="flex items-center space-x-2 cursor-pointer">
-                                    <input type="checkbox" id="homeGroundAdvantage" class="form-checkbox h-5 w-5 text-indigo-600 bg-gray-800 border-gray-600 rounded focus:ring-indigo-500">
-                                    <span class="text-gray-300">Home Ground Advantage</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="font-black text-3xl text-gray-500">VS</div>
-
-                        <div class="flex-1 text-center">
-                            <label for="awayTeamSelect" class="block text-lg font-semibold mb-2">Away Team</label>
-                            <select id="awayTeamSelect" class="w-full bg-gray-800 border-2 border-gray-600 rounded-lg p-3 text-lg focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition"></select>
-                        </div>
-                    </div>
-                     <div id="conditionsPanel" class="text-center mt-6 p-3 bg-gray-800/50 rounded-lg hidden">
-                        <h3 class="font-semibold">Match Conditions: <span id="weatherDisplay" class="font-bold text-amber-300"></span></h3>
-                    </div>
-
-                    <div class="text-center mt-8">
-                        <button id="simulateBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-10 rounded-lg text-xl transition-transform transform hover:scale-105 shadow-lg">
-                            Simulate Match
-                        </button>
-                        <div id="error-message" class="text-red-400 mt-4 h-6"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="seasonContainer" class="hidden">
-                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="md:col-span-1 bg-gray-700/50 p-4 rounded-xl">
-                        <div class="mb-4 border-b border-gray-700 flex">
-                            <button id="ladderTabBtn" class="tab-btn active py-2 px-4 bg-gray-700 hover:bg-indigo-600 rounded-t-lg transition">AFL Ladder</button>
-                            <button id="leadersTabBtn" class="tab-btn py-2 px-4 bg-gray-700 hover:bg-indigo-600 rounded-t-lg transition">Season Leaders</button>
-                        </div>
-                        <div>
-                            <div id="ladderContainer" class="text-xs">
-                                </div>
-                            <div id="statTrackerContainer" class="text-xs space-y-3 hidden">
-                                </div>
-                        </div>
-                    </div>
-
-                    <div class="md:col-span-1 bg-gray-700/50 p-4 rounded-xl">
-                         <h2 class="text-2xl font-bold text-center mb-4">Season Fixture</h2>
-                         <div class="text-center mb-4">
-                            <button id="startSeasonBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition">Start New Season</button>
-                         </div>
-                         <div id="seasonControls" class="hidden">
-                             <div class="flex justify-between items-center mb-4">
-                                <button id="prevRoundBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">&lt; Prev</button>
-                                <h3 id="roundTitle" class="text-xl font-bold text-center"></h3>
-                                <button id="nextRoundBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">Next &gt;</button>
-                             </div>
-                             <div id="fixtureContainer" class="mb-4"></div>
-                             <div class="flex justify-center space-x-4">
-                                <button id="simRoundBtn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition">Simulate Round</button>
-                             </div>
-                         </div>
-                    </div>
-                 </div>
-            </div>
-
-
-            <div id="resultsContainer" class="hidden mt-8">
-                <div class="bg-gray-900 rounded-xl p-6">
-                    <h2 id="resultsTitle" class="text-3xl font-bold text-center mb-6">Match Results</h2>
-                    
-                    <div id="finalScoreboard" class="flex items-center justify-around bg-gray-800 p-6 rounded-lg mb-6 shadow-inner">
-                        <div id="homeFinalDisplay" class="text-center"></div>
-                        <div id="gameStatus" class="text-5xl font-black text-gray-500"></div>
-                        <div id="awayFinalDisplay" class="text-center"></div>
-                    </div>
-
-                    <h3 class="text-xl font-semibold text-center mb-4">Quarter by Quarter</h3>
-                    <div id="quarterByQuarterScores" class="overflow-x-auto mb-6"></div>
-                    
-                    <div class="mb-4 border-b border-gray-700 flex">
-                        <button id="commentaryTab" class="tab-btn active py-2 px-4 bg-gray-700 hover:bg-indigo-600 rounded-t-lg transition">Match Commentary</button>
-                        <button id="statsTab" class="tab-btn py-2 px-4 bg-gray-700 hover:bg-indigo-600 rounded-t-lg transition">Player Stats</button>
-                    </div>
-
-                    <div id="commentaryPanel">
-                        <div id="commentaryLog" class="bg-gray-800/50 rounded-lg p-4 space-y-3 text-sm h-64 overflow-y-auto"></div>
-                    </div>
-                    <div id="statsPanel" class="hidden">
-                         <div class="grid md:grid-cols-2 gap-6 h-64 overflow-y-auto p-2">
-                            <div>
-                                <h4 id="homeStatsTitle" class="text-lg font-bold mb-2 text-center"></h4>
-                                <div id="homePlayerStats" class="text-xs"></div>
-                            </div>
-                            <div>
-                                <h4 id="awayStatsTitle" class="text-lg font-bold mb-2 text-center"></h4>
-                                <div id="awayPlayerStats" class="text-xs"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <div id="awardsContainer" class="hidden fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center p-4 z-50">
-        <div class="bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-8 w-full max-w-4xl text-white relative">
-            <button id="closeAwardsBtn" class="absolute top-4 right-4 text-2xl font-bold hover:text-red-500 transition">&times;</button>
-            <h2 class="text-4xl font-bold text-center mb-6 text-amber-300">End of Season Awards</h2>
-            <div id="awardsContent" class="space-y-8 overflow-y-auto max-h-[70vh] p-2">
-                </div>
+            <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-blue-600">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#home" class="block py-2 text-gray-600 hover:text-blue-600">Home</a>
+            <a href="#services" class="block py-2 text-gray-600 hover:text-blue-600">Services</a>
+            <a href="#gallery" class="block py-2 text-gray-600 hover:text-blue-600">Gallery</a>
+            <a href="#about" class="block py-2 text-gray-600 hover:text-blue-600">About Us</a>
+            <a href="#contact" class="block mt-2 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 text-center">Contact Us</a>
         </div>
-    </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero-bg text-white">
+            <div class="container mx-auto px-6 py-32 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight">Expert Tiling Services in Tullamarine</h1>
+                <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">Flawless tiling for kitchens, bathrooms, and commercial spaces. Quality craftsmanship you can trust.</p>
+                <a href="#contact" class="bg-blue-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-blue-700 transition duration-300">Get a Free Quote</a>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Our Services</h2>
+                    <p class="text-gray-600 mt-2">Precision, quality, and durability in every tile we lay.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Service Item 1 -->
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow duration-300">
+                        <div class="text-blue-600 mb-4">
+                            <i class="fas fa-bath text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Bathroom Tiling</h3>
+                        <p class="text-gray-600">Transform your bathroom into a sanctuary with our expert waterproofing and tiling services.</p>
+                    </div>
+                    <!-- Service Item 2 -->
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow duration-300">
+                        <div class="text-blue-600 mb-4">
+                            <i class="fas fa-utensils text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Kitchen Tiling</h3>
+                        <p class="text-gray-600">From splashbacks to floors, we provide beautiful and functional tiling for the heart of your home.</p>
+                    </div>
+                    <!-- Service Item 3 -->
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow duration-300">
+                        <div class="text-blue-600 mb-4">
+                            <i class="fas fa-store text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Commercial Tiling</h3>
+                        <p class="text-gray-600">Durable and stylish tiling solutions for retail, offices, and other commercial properties.</p>
+                    </div>
+                     <!-- Service Item 4 -->
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow duration-300">
+                        <div class="text-blue-600 mb-4">
+                            <i class="fas fa-swimming-pool text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Pool Tiling</h3>
+                        <p class="text-gray-600">Create a stunning and safe pool area with our specialized pool tiling and coping services.</p>
+                    </div>
+                     <!-- Service Item 5 -->
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow duration-300">
+                        <div class="text-blue-600 mb-4">
+                            <i class="fas fa-home text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Floor & Wall Tiling</h3>
+                        <p class="text-gray-600">Expert installation for all types of tiles including ceramic, porcelain, and natural stone.</p>
+                    </div>
+                     <!-- Service Item 6 -->
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-md text-center hover:shadow-xl transition-shadow duration-300">
+                        <div class="text-blue-600 mb-4">
+                            <i class="fas fa-tools text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Tile Repair & Restoration</h3>
+                        <p class="text-gray-600">We can repair cracked tiles, replace grout, and restore your tiled surfaces to their former glory.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Our Work</h2>
+                    <p class="text-gray-600 mt-2">A showcase of our commitment to quality.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="rounded-lg overflow-hidden"><img src="https://placehold.co/600x400/cccccc/ffffff?text=Modern+Bathroom" alt="Modern Bathroom Tiling" class="w-full h-full object-cover gallery-img"></div>
+                    <div class="rounded-lg overflow-hidden"><img src="https://placehold.co/600x400/b0b0b0/ffffff?text=Kitchen+Splashback" alt="Kitchen Splashback" class="w-full h-full object-cover gallery-img"></div>
+                    <div class="rounded-lg overflow-hidden"><img src="https://placehold.co/600x400/a0a0a0/ffffff?text=Commercial+Floor" alt="Commercial Floor Tiling" class="w-full h-full object-cover gallery-img"></div>
+                    <div class="rounded-lg overflow-hidden"><img src="https://placehold.co/600x400/dcdcdc/ffffff?text=Outdoor+Patio" alt="Outdoor Patio Tiling" class="w-full h-full object-cover gallery-img"></div>
+                    <div class="rounded-lg overflow-hidden"><img src="https://placehold.co/600x400/c0c0c0/ffffff?text=Luxury+Ensuite" alt="Luxury Ensuite" class="w-full h-full object-cover gallery-img"></div>
+                    <div class="rounded-lg overflow-hidden"><img src="https://placehold.co/600x400/909090/ffffff?text=Feature+Wall" alt="Feature Wall Tiling" class="w-full h-full object-cover gallery-img"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row items-center gap-12">
+                    <div class="md:w-1/2">
+                        <img src="https://placehold.co/600x400/e0e0e0/333333?text=Our+Team" alt="Power Tiling Team" class="rounded-lg shadow-lg">
+                    </div>
+                    <div class="md:w-1/2">
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">About Power Tiling</h2>
+                        <p class="text-gray-600 mb-4">Based in Tullamarine, Victoria, Power Tiling has been delivering exceptional tiling services for over 15 years. Our team of certified professionals is dedicated to providing the highest quality workmanship and customer service.</p>
+                        <p class="text-gray-600 mb-6">We believe in a simple philosophy: do it right the first time. We use only the best materials and techniques to ensure a finish that is both beautiful and long-lasting. Your satisfaction is our top priority.</p>
+                        <a href="#contact" class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition duration-300">Speak with an Expert</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 bg-gray-100">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Contact Us</h2>
+                    <p class="text-gray-600 mt-2">Ready to start your project? Get in touch for a free, no-obligation quote.</p>
+                </div>
+                <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+                    <!-- IMPORTANT: Replace your@email.com with your actual email address -->
+                    <form action="https://formsubmit.co/phillip.paskalidis@gmail.com" method="POST">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <input type="text" name="name" placeholder="Your Name" class="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <input type="email" name="email" placeholder="Your Email" class="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div class="mb-6">
+                            <input type="text" name="subject" placeholder="Subject" class="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div class="mb-6">
+                            <textarea name="message" rows="5" placeholder="Your Message" class="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+                        </div>
+                        <!-- This hidden field can be used to redirect the user to a 'thank you' page -->
+                        <input type="hidden" name="_next" value="https://yourdomain.co/thanks.html">
+                        <!-- This hidden field helps prevent spam -->
+                        <input type="hidden" name="_captcha" value="false">
+                        <div class="text-center">
+                            <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold text-lg hover:bg-blue-700 transition duration-300">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Power Tiling</h3>
+                    <p class="text-gray-400">Your trusted tiling experts in Tullamarine and surrounding areas.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Contact Info</h3>
+                    <ul class="text-gray-400 space-y-2">
+                        <li><i class="fas fa-map-marker-alt mr-2"></i>Tullamarine, VIC, Australia</li>
+                        <li><i class="fas fa-phone-alt mr-2"></i>(03) 1234 5678</li>
+                        <li><i class="fas fa-envelope mr-2"></i>quote@powertiling.com.au</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-facebook-f text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-instagram text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-linkedin-in text-2xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-700 pt-6 text-center text-gray-500">
+                <p>&copy; 2024 Power Tiling. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-    // --- DATA ---
-    const teams = {
-        "Adelaide": {
-            name: "Adelaide Crows",
-            initials: "ADE",
-            logo: "https://placehold.co/64x64/002B5C/FFD200?text=CROWS",
-            players: [
-                { name: "Jordan Dawson", rating: 90, position: "Midfield" }, { name: "Izak Rankine", rating: 88, position: "Forward/Midfield" },
-                { name: "Rory Laird", rating: 87, position: "Defender/Midfield" }, { name: "Darcy Fogarty", rating: 85, position: "Forward" },
-                { name: "Riley Thilthorpe", rating: 85, position: "Forward" }, { name: "Taylor Walker", rating: 85, position: "Forward" },
-                { name: "Matt Crouch", rating: 85, position: "Midfield" }, { name: "Mitchell Hinge", rating: 84, position: "Defence" },
-                { name: "Alex Neal-Bullen", rating: 84, position: "Midfield" }, { name: "Ben Keays", rating: 82, position: "Midfield" },
-                { name: "Jake Soligo", rating: 82, position: "Midfield" }, { name: "Josh Rachele", rating: 81, position: "Forward" },
-                { name: "Josh Worrell", rating: 81, position: "Defence" }, { name: "Mark Keane", rating: 81, position: "Defence" },
-                { name: "Reilly O’Brien", rating: 81, position: "Ruck" }, { name: "Lachlan Sholl", rating: 80, position: "Midfield" },
-                { name: "Luke Nankervis", rating: 79, position: "Midfield" }, { name: "Chayce Jones", rating: 79, position: "Midfield/Forward" },
-                { name: "Sam Berry", rating: 78, position: "Midfield" }, { name: "Max Michalanney", rating: 78, position: "Defence" },
-                { name: "Brodie Smith", rating: 78, position: "Defence" }, { name: "James Peatling", rating: 78, position: "Midfield" },
-                { name: "Billy Dowling", rating: 75, position: "Midfield" }
-            ]
-        },
-        "Brisbane": {
-            name: "Brisbane Lions",
-            initials: "BRI",
-            logo: "https://placehold.co/64x64/A0002E/FFB61E?text=LIONS",
-            players: [
-                { name: "Lachie Neale", rating: 91, position: "Midfield" }, { name: "Josh Dunkley", rating: 90, position: "Midfield/Forward" },
-                { name: "Dayne Zorko", rating: 90, position: "Defender/Forward" }, { name: "Harris Andrews", rating: 87, position: "Defence" },
-                { name: "Oscar McInerney", rating: 86, position: "Ruck" }, { name: "Hugh McCluggage", rating: 86, position: "Midfield" },
-                { name: "Jarrod Berry", rating: 86, position: "Midfield" }, { name: "Cam Rayner", rating: 85, position: "Forward" },
-                { name: "Darcy Wilmot", rating: 85, position: "Defence" }, { name: "Charlie Cameron", rating: 84, position: "Forward" },
-                { name: "Zac Bailey", rating: 83, position: "Midfield/Forward" }, { name: "Kai Lohmann", rating: 82, position: "Forward" },
-                { name: "Callum Ah Chee", rating: 82, position: "Forward/Defence" }, { name: "Tom Doedee", rating: 81, position: "Defence" },
-                { name: "Will Ashcroft", rating: 81, position: "Midfield" }, { name: "Jaspa Fletcher", rating: 81, position: "Midfield" },
-                { name: "Eric Hipwood", rating: 80, position: "Forward" }, { name: "Lincoln McCarthy", rating: 79, position: "Forward" },
-                { name: "Ryan Lester", rating: 79, position: "Defence" }, { name: "Brandon Starcevich", rating: 79, position: "Defence" },
-                { name: "Noah Answerth", rating: 78, position: "Defence" }, { name: "Jack Payne", rating: 77, position: "Defence" },
-                { name: "Logan Morris", rating: 75, position: "Forward" }
-            ]
-        },
-        "Carlton": {
-            name: "Carlton Blues",
-            initials: "CARL",
-            logo: "https://placehold.co/64x64/0E1E2F/FFFFFF?text=BLUES",
-            players: [
-                { name: "Patrick Cripps", rating: 94, position: "Midfield" }, { name: "Charlie Curnow", rating: 91, position: "Forward" },
-                { name: "Sam Walsh", rating: 89, position: "Midfield" }, { name: "Harry McKay", rating: 88, position: "Forward" },
-                { name: "Jacob Weitering", rating: 87, position: "Defence" }, { name: "Tom De Koning", rating: 86, position: "Ruck" },
-                { name: "Nic Newman", rating: 85, position: "Defence" }, { name: "Zac Williams", rating: 84, position: "Defence" },
-                { name: "Blake Acres", rating: 83, position: "Midfield" }, { name: "George Hewett", rating: 83, position: "Midfield" },
-                { name: "Elijah Hollands", rating: 82, position: "Midfield/Forward" }, { name: "Adam Cerra", rating: 82, position: "Midfield" },
-                { name: "Adam Saad", rating: 81, position: "Defence" }, { name: "Mitch McGovern", rating: 80, position: "Defence" },
-                { name: "Brodie Kemp", rating: 80, position: "Defence" }, { name: "Sam Docherty", rating: 79, position: "Defence/Midfield" },
-                { name: "Jack Silvagni", rating: 79, position: "Forward" }, { name: "Matthew Cottrell", rating: 79, position: "Midfield" },
-                { name: "Lachie Fogarty", rating: 78, position: "Midfield/Forward" }, { name: "Marc Pittonet", rating: 77, position: "Ruck" },
-                { name: "Nick Haynes", rating: 77, position: "Defence" }, { name: "Lachlan Cowan", rating: 74, position: "Defence" },
-                { name: "Lewis Young", rating: 74, position: "Defence" }
-            ]
-        },
-        "Collingwood": {
-            name: "Collingwood Magpies",
-            initials: "COLL",
-            logo: "https://placehold.co/64x64/000000/FFFFFF?text=PIES",
-            players: [
-                { name: "Nick Daicos", rating: 93, position: "Midfield" }, { name: "Dan Houston", rating: 91, position: "Defence" },
-                { name: "Darcy Cameron", rating: 90, position: "Ruck/Forward" }, { name: "Josh Daicos", rating: 89, position: "Midfield" },
-                { name: "Jack Crisp", rating: 87, position: "Midfield" }, { name: "Scott Pendlebury", rating: 87, position: "Midfield" },
-                { name: "Jordan De Goey", rating: 85, position: "Midfield/Forward" }, { name: "Lachie Schultz", rating: 85, position: "Forward" },
-                { name: "Brody Mihocek", rating: 84, position: "Forward" }, { name: "Jamie Elliott", rating: 84, position: "Forward" },
-                { name: "Tim Membrey", rating: 82, position: "Forward" }, { name: "Steele Sidebottom", rating: 82, position: "Midfield" },
-                { name: "Bobby Hill", rating: 81, position: "Forward" }, { name: "Darcy Moore", rating: 81, position: "Defence" },
-                { name: "Jeremy Howe", rating: 81, position: "Defence" }, { name: "Isaac Quaynor", rating: 80, position: "Defence" },
-                { name: "Patrick Lipinski", rating: 80, position: "Midfield" }, { name: "Harry Perryman", rating: 80, position: "Defence/Midfield" },
-                { name: "Brayden Maynard", rating: 79, position: "Defence" }, { name: "Will Hoskin-Elliott", rating: 79, position: "Midfield/Forward" },
-                { name: "Daniel McStay", rating: 77, position: "Forward" }, { name: "Ned Long", rating: 74, position: "Midfield" },
-                { name: "Tom Mitchell", rating: 74, position: "Midfield" }
-            ]
-        },
-        "Essendon": {
-            name: "Essendon Bombers",
-            initials: "ESS",
-            logo: "https://placehold.co/64x64/CC2031/000000?text=DONS",
-            players: [
-                { name: "Zach Merrett", rating: 89, position: "Midfield" }, { name: "Jye Caldwell", rating: 88, position: "Midfield" },
-                { name: "Nic Martin", rating: 87, position: "Midfield/Defence" }, { name: "Darcy Parish", rating: 86, position: "Midfield" },
-                { name: "Kyle Langford", rating: 86, position: "Forward" }, { name: "Jordan Ridley", rating: 84, position: "Defence" },
-                { name: "Mason Redman", rating: 84, position: "Defence" }, { name: "Sam Durham", rating: 83, position: "Midfield" },
-                { name: "Andrew McGrath", rating: 83, position: "Midfield/Defence" }, { name: "Xavier Duursma", rating: 82, position: "Midfield" },
-                { name: "Will Setterfield", rating: 80, position: "Midfield" }, { name: "Dylan Shiel", rating: 79, position: "Midfield" },
-                { name: "Archie Perkins", rating: 79, position: "Midfield/Forward" }, { name: "Sam Draper", rating: 78, position: "Ruck" },
-                { name: "Matt Guelfi", rating: 78, position: "Midfield/Forward" }, { name: "Ben McKay", rating: 77, position: "Defence" },
-                { name: "Nate Caddy", rating: 76, position: "Forward" }, { name: "Jade Gresham", rating: 75, position: "Forward/Midfield" },
-                { name: "Harrison Jones", rating: 75, position: "Forward" }, { name: "Ben Hobbs", rating: 75, position: "Midfield" },
-                { name: "Jaxon Prior", rating: 73, position: "Defence" }, { name: "Nik Cox", rating: 72, position: "Utility" },
-                { name: "Archie Roberts", rating: 71, position: "Defence" }
-            ]
-        },
-        "Fremantle": {
-            name: "Fremantle Dockers",
-            initials: "FRE",
-            logo: "https://placehold.co/64x64/2A1A54/FFFFFF?text=DOCK",
-            players: [
-                { name: "Caleb Serong", rating: 92, position: "Midfield" }, { name: "Andrew Brayshaw", rating: 91, position: "Midfield" },
-                { name: "Hayden Young", rating: 89, position: "Midfield" }, { name: "Jordan Clark", rating: 88, position: "Defence" },
-                { name: "Luke Jackson", rating: 88, position: "Ruck/Forward" }, { name: "Josh Treacy", rating: 88, position: "Forward" },
-                { name: "Sam Switkowski", rating: 87, position: "Forward" }, { name: "Luke Ryan", rating: 87, position: "Defence" },
-                { name: "Bailey Banfield", rating: 87, position: "Forward/Midfield" }, { name: "Sean Darcy", rating: 87, position: "Ruck" },
-                { name: "Shai Bolton", rating: 86, position: "Midfield/Forward" }, { name: "Jye Amiss", rating: 80, position: "Forward" },
-                { name: "Nat Fyfe", rating: 80, position: "Midfield" }, { name: "Michael Frederick", rating: 80, position: "Forward" },
-                { name: "Jeremy Sharp", rating: 79, position: "Midfield" }, { name: "Jaeger O’Meara", rating: 79, position: "Midfield" },
-                { name: "Brennan Cox", rating: 79, position: "Defence" }, { name: "Sam Sturt", rating: 78, position: "Forward" },
-                { name: "James Aish", rating: 78, position: "Midfield" }, { name: "Alex Pearce", rating: 78, position: "Defence" },
-                { name: "Corey Wagner", rating: 77, position: "Defence" }, { name: "Will Brodie", rating: 76, position: "Midfield" },
-                { name: "Michael Walters", rating: 74, position: "Forward" }
-            ]
-        },
-        "Geelong": {
-            name: "Geelong Cats",
-            initials: "GEEL",
-            logo: "https://placehold.co/64x64/002B5C/FFFFFF?text=CATS",
-            players: [
-                { name: "Max Holmes", rating: 91, position: "Midfield" }, { name: "Tom Stewart", rating: 90, position: "Defence" },
-                { name: "Jeremy Cameron", rating: 90, position: "Forward" }, { name: "Gryan Miers", rating: 88, position: "Forward" },
-                { name: "Jack Bowes", rating: 87, position: "Midfield/Defence" }, { name: "Tyson Stengle", rating: 87, position: "Forward" },
-                { name: "Zach Guthrie", rating: 86, position: "Defence" }, { name: "Oliver Dempsey", rating: 86, position: "Forward" },
-                { name: "Mark Blicavs", rating: 85, position: "Utility" }, { name: "Patrick Dangerfield", rating: 85, position: "Midfield" },
-                { name: "Shannon Neale", rating: 83, position: "Forward" }, { name: "Oliver Henry", rating: 82, position: "Forward" },
-                { name: "Tom Atkins", rating: 81, position: "Midfield" }, { name: "Mitch Duncan", rating: 81, position: "Midfield" },
-                { name: "Brad Close", rating: 81, position: "Forward" }, { name: "Sam De Koning", rating: 80, position: "Defence" },
-                { name: "Jake Kolodjashnij", rating: 79, position: "Defence" }, { name: "Bailey Smith", rating: 79, position: "Midfield" },
-                { name: "Tanner Bruhn", rating: 79, position: "Midfield" }, { name: "Shaun Mannagh", rating: 79, position: "Forward" },
-                { name: "Cameron Guthrie", rating: 77, position: "Midfield" }, { name: "Jack Henry", rating: 77, position: "Defence/Forward" },
-                { name: "Rhys Stanley", rating: 76, position: "Ruck" }
-            ]
-        },
-        "GoldCoast": {
-            name: "Gold Coast Suns",
-            initials: "GCFC",
-            logo: "https://placehold.co/64x64/D90123/009CA6?text=SUNS",
-            players: [
-                { name: "Noah Anderson", rating: 91, position: "Midfield" }, { name: "Matt Rowell", rating: 89, position: "Midfield" },
-                { name: "Sam Flanders", rating: 87, position: "Midfield/Forward" }, { name: "Jarrod Witts", rating: 87, position: "Ruck" },
-                { name: "Ben Ainsworth", rating: 86, position: "Forward" }, { name: "Ben King", rating: 86, position: "Forward" },
-                { name: "Wil Powell", rating: 86, position: "Defence" }, { name: "Daniel Rioli", rating: 86, position: "Defence/Midfield" },
-                { name: "Touk Miller", rating: 86, position: "Midfield" }, { name: "Sam Collins", rating: 84, position: "Defence" },
-                { name: "Sam Clohesy", rating: 82, position: "Defence" }, { name: "Brayden Fiorini", rating: 81, position: "Midfield" },
-                { name: "Mac Andrew", rating: 80, position: "Defence" }, { name: "Bodhi Uwland", rating: 80, position: "Defence" },
-                { name: "Alex Sexton", rating: 80, position: "Forward" }, { name: "John Noble", rating: 79, position: "Defence" },
-                { name: "Ben Long", rating: 78, position: "Defence/Forward" }, { name: "Charlie Ballard", rating: 78, position: "Defence" },
-                { name: "Lachie Weller", rating: 77, position: "Midfield/Defence" }, { name: "Will Graham", rating: 77, position: "Defence" },
-                { name: "Alex Davies", rating: 77, position: "Midfield" }, { name: "David Swallow", rating: 75, position: "Midfield" },
-                { name: "Bailey Humphrey", rating: 75, position: "Midfield/Forward" }
-            ]
-        },
-        "GWS": {
-            name: "GWS Giants",
-            initials: "GWS",
-            logo: "https://placehold.co/64x64/F15C22/000000?text=GWS",
-            players: [
-                { name: "Tom Green", rating: 92, position: "Midfield" }, { name: "Jesse Hogan", rating: 91, position: "Forward" },
-                { name: "Toby Greene", rating: 89, position: "Forward" }, { name: "Lachie Whitfield", rating: 88, position: "Midfield/Defence" },
-                { name: "Brent Daniels", rating: 87, position: "Forward" }, { name: "Harry Himmelberg", rating: 87, position: "Forward/Defence" },
-                { name: "Josh Kelly", rating: 86, position: "Midfield" }, { name: "Finn Callaghan", rating: 86, position: "Midfield" },
-                { name: "Stephen Coniglio", rating: 86, position: "Midfield" }, { name: "Jack Buckley", rating: 85, position: "Defence" },
-                { name: "Sam Taylor", rating: 84, position: "Defence" }, { name: "Jake Stringer", rating: 83, position: "Forward/Midfield" },
-                { name: "Connor Idun", rating: 83, position: "Defence" }, { name: "Lachie Ash", rating: 81, position: "Midfield/Defence" },
-                { name: "Darcy Jones", rating: 80, position: "Midfield/Forward" }, { name: "Callan Ward", rating: 80, position: "Midfield" },
-                { name: "Kieren Briggs", rating: 80, position: "Ruck" }, { name: "Jake Riccardi", rating: 79, position: "Forward" },
-                { name: "Toby Bedford", rating: 78, position: "Forward" }, { name: "Aaron Cadman", rating: 77, position: "Forward" },
-                { name: "Callum Brown", rating: 76, position: "Midfield" }, { name: "Jacob Wehr", rating: 76, position: "Defence" },
-                { name: "Harvey Thomas", rating: 74, position: "Midfield/Forward" }
-            ]
-        },
-        "Hawthorn": {
-            name: "Hawthorn Hawks",
-            initials: "HAW",
-            logo: "https://placehold.co/64x64/4D2004/FFB61E?text=HAWKS",
-            players: [
-                { name: "Dylan Moore", rating: 89, position: "Forward/Midfield" }, { name: "James Sicily", rating: 89, position: "Defence" },
-                { name: "Jai Newcombe", rating: 87, position: "Midfield" }, { name: "Jack Ginnivan", rating: 87, position: "Forward" },
-                { name: "Karl Amon", rating: 87, position: "Midfield" }, { name: "Massimo D’Ambrosio", rating: 87, position: "Defence" },
-                { name: "Josh Battle", rating: 86, position: "Defence/Forward" }, { name: "Connor Macdonald", rating: 86, position: "Midfield/Forward" },
-                { name: "James Worpel", rating: 85, position: "Midfield" }, { name: "Will Day", rating: 85, position: "Midfield" },
-                { name: "Lloyd Meek", rating: 84, position: "Ruck" }, { name: "Mabior Chol", rating: 83, position: "Forward" },
-                { name: "Nick Watson", rating: 83, position: "Forward" }, { name: "Jack Gunston", rating: 82, position: "Forward" },
-                { name: "Tom Barrass", rating: 81, position: "Defence" }, { name: "Josh Weddle", rating: 81, position: "Defence" },
-                { name: "Jack Scrimshaw", rating: 81, position: "Defence" }, { name: "Jarman Impey", rating: 81, position: "Defence/Forward" },
-                { name: "Cam Mackenzie", rating: 80, position: "Midfield" }, { name: "Mitch Lewis", rating: 80, position: "Forward" },
-                { name: "Conor Nash", rating: 80, position: "Midfield" }, { name: "Harry Morrison", rating: 80, position: "Midfield/Defence" },
-                { name: "Blake Hardwick", rating: 79, position: "Defence" }
-            ]
-        },
-        "Melbourne": {
-            name: "Melbourne Demons",
-            initials: "MELB",
-            logo: "https://placehold.co/64x64/0F1131/ED3237?text=DEES",
-            players: [
-                { name: "Max Gawn", rating: 90, position: "Ruck" }, { name: "Christian Petracca", rating: 89, position: "Midfield/Forward" },
-                { name: "Jack Viney", rating: 88, position: "Midfield" }, { name: "Trent Rivers", rating: 88, position: "Defence" },
-                { name: "Clayton Oliver", rating: 88, position: "Midfield" }, { name: "Kysaiah Pickett", rating: 87, position: "Forward" },
-                { name: "Jake Lever", rating: 87, position: "Defence" }, { name: "Steven May", rating: 87, position: "Defence" },
-                { name: "Ed Langdon", rating: 86, position: "Midfield" }, { name: "Kade Chandler", rating: 82, position: "Forward" },
-                { name: "Christian Salem", rating: 82, position: "Defence" }, { name: "Bayley Fritsch", rating: 82, position: "Forward" },
-                { name: "Tom McDonald", rating: 80, position: "Forward" }, { name: "Judd McVee", rating: 80, position: "Defence" },
-                { name: "Jacob van Rooyen", rating: 80, position: "Forward" }, { name: "Tom Sparrow", rating: 79, position: "Midfield" },
-                { name: "Caleb Windsor", rating: 79, position: "Midfield" }, { name: "Daniel Turner", rating: 77, position: "Defence" },
-                { name: "Jake Bowey", rating: 76, position: "Defence" }, { name: "Jack Billings", rating: 75, position: "Midfield/Forward" },
-                { name: "Harry Sharp", rating: 75, position: "Midfield" }, { name: "Koltyn Tholstrup", rating: 73, position: "Midfield" },
-                { name: "Taj Woewodin", rating: 71, position: "Midfield" }
-            ]
-        },
-        "NorthMelbourne": {
-            name: "North Melbourne Kangaroos",
-            initials: "NMFC",
-            logo: "https://placehold.co/64x64/003294/FFFFFF?text=ROOS",
-            players: [
-                { name: "Harry Sheezel", rating: 90, position: "Defence/Forward" }, { name: "Luke Davies-Uniacke", rating: 88, position: "Midfield" },
-                { name: "Tristan Xerri", rating: 87, position: "Ruck" }, { name: "Jy Simpkin", rating: 85, position: "Midfield" },
-                { name: "George Wardlaw", rating: 85, position: "Midfield" }, { name: "Nick Larkey", rating: 84, position: "Forward" },
-                { name: "Colby McKercher", rating: 83, position: "Midfield" }, { name: "Tom Powell", rating: 82, position: "Midfield" },
-                { name: "Cameron Zurhaar", rating: 82, position: "Forward" }, { name: "Caleb Daniel", rating: 81, position: "Midfield/Forward" },
-                { name: "Bailey Scott", rating: 81, position: "Midfield/Defence" }, { name: "Luke Parker", rating: 80, position: "Midfield" },
-                { name: "Paul Curtis", rating: 80, position: "Forward" }, { name: "Charlie Comben", rating: 80, position: "Forward/Ruck" },
-                { name: "Will Phillips", rating: 79, position: "Midfield" }, { name: "Darcy Tucker", rating: 78, position: "Midfield" },
-                { name: "Jack Darling", rating: 78, position: "Forward" }, { name: "Zac Fisher", rating: 77, position: "Midfield/Forward" },
-                { name: "Luke McDonald", rating: 77, position: "Defence" }, { name: "Eddie Ford", rating: 75, position: "Forward" },
-                { name: "Aidan Corr", rating: 74, position: "Defence" }, { name: "Zane Duursma", rating: 73, position: "Forward" },
-                { name: "Dylan Stephens", rating: 72, position: "Midfield" }
-            ]
-        },
-        "PortAdelaide": {
-            name: "Port Adelaide Power",
-            initials: "PORT",
-            logo: "https://placehold.co/64x64/008AAB/000000?text=POWER",
-            players: [
-                { name: "Zak Butters", rating: 91, position: "Midfield/Forward" }, { name: "Connor Rozee", rating: 88, position: "Midfield" },
-                { name: "Jason Horne-Francis", rating: 88, position: "Midfield" }, { name: "Ollie Wines", rating: 87, position: "Midfield" },
-                { name: "Jack Lukosius", rating: 86, position: "Forward/Defence" }, { name: "Mitch Georgiades", rating: 85, position: "Forward" },
-                { name: "Willem Drew", rating: 85, position: "Midfield" }, { name: "Jase Burgoyne", rating: 84, position: "Defence" },
-                { name: "Kane Farrell", rating: 84, position: "Defence/Midfield" }, { name: "Miles Bergman", rating: 80, position: "Defence" },
-                { name: "Aliir Aliir", rating: 80, position: "Defence" }, { name: "Willie Rioli", rating: 80, position: "Forward" },
-                { name: "Ryan Burton", rating: 80, position: "Defence" }, { name: "Joe Richards", rating: 79, position: "Forward" },
-                { name: "Darcy Byrne-Jones", rating: 79, position: "Defence/Forward" }, { name: "Todd Marshall", rating: 79, position: "Forward" },
-                { name: "Travis Boak", rating: 79, position: "Midfield" }, { name: "Logan Evans", rating: 78, position: "Defence" },
-                { name: "Jordon Sweet", rating: 78, position: "Ruck" }, { name: "Brandon Zerk-Thatcher", rating: 77, position: "Defence" },
-                { name: "Jackson Mead", rating: 75, position: "Midfield" }, { name: "Esava Ratugolea", rating: 75, position: "Defence" },
-                { name: "Sam Powell-Pepper", rating: 74, position: "Midfield/Forward" }
-            ]
-        },
-        "Richmond": {
-            name: "Richmond Tigers",
-            initials: "RICH",
-            logo: "https://placehold.co/64x64/FFD700/000000?text=TIGS",
-            players: [
-                { name: "Toby Nankervis", rating: 89, position: "Ruck" }, { name: "Tim Taranto", rating: 86, position: "Midfield" },
-                { name: "Nick Vlastuin", rating: 85, position: "Defence" }, { name: "Jayden Short", rating: 84, position: "Midfield/Defence" },
-                { name: "Ben Miller", rating: 81, position: "Defence" }, { name: "Dion Prestia", rating: 81, position: "Midfield" },
-                { name: "Jacob Hopper", rating: 81, position: "Midfield" }, { name: "Jack Ross", rating: 80, position: "Midfield" },
-                { name: "Rhyan Mansell", rating: 79, position: "Defence" }, { name: "Tom Lynch", rating: 77, position: "Forward" },
-                { name: "Seth Campbell", rating: 76, position: "Forward" }, { name: "Nathan Broad", rating: 76, position: "Defence" },
-                { name: "Sam Lalor", rating: 75, position: "Midfield" }, { name: "Kamdyn McIntosh", rating: 75, position: "Midfield" },
-                { name: "Noah Balta", rating: 75, position: "Defence/Forward" }, { name: "Thomson Dow", rating: 75, position: "Midfield" },
-                { name: "Hugo Ralphsmith", rating: 75, position: "Midfield" }, { name: "Mykelti Lefau", rating: 74, position: "Forward" },
-                { name: "Tom Brown", rating: 71, position: "Defence" }, { name: "Tylar Young", rating: 71, position: "Defence" },
-                { name: "James Trezise", rating: 71, position: "Defence" }, { name: "Jacob Bauer", rating: 70, position: "Forward" },
-                { name: "Samuel Banks", rating: 70, position: "Defence" }
-            ]
-        },
-        "StKilda": {
-            name: "St Kilda Saints",
-            initials: "STK",
-            logo: "https://placehold.co/64x64/ED3237/000000?text=SAINTS",
-            players: [
-                { name: "Jack Steele", rating: 90, position: "Midfield" }, { name: "Jack Sinclair", rating: 88, position: "Midfield/Defence" },
-                { name: "Rowan Marshall", rating: 86, position: "Ruck" }, { name: "Jack Macrae", rating: 86, position: "Midfield" },
-                { name: "Nasiah Wanganeen-Milera", rating: 85, position: "Midfield/Defence" }, { name: "Jack Higgins", rating: 85, position: "Forward" },
-                { name: "Mitch Owens", rating: 84, position: "Midfield/Forward" }, { name: "Callum Wilkie", rating: 84, position: "Defence" },
-                { name: "Mason Wood", rating: 84, position: "Midfield/Forward" }, { name: "Max King", rating: 82, position: "Forward" },
-                { name: "Bradley Hill", rating: 82, position: "Midfield" }, { name: "Mattaes Phillipou", rating: 81, position: "Midfield/Forward" },
-                { name: "Marcus Windhager", rating: 80, position: "Midfield" }, { name: "Hunter Clark", rating: 80, position: "Midfield/Defence" },
-                { name: "Darcy Wilson", rating: 79, position: "Midfield" }, { name: "Ryan Byrnes", rating: 79, position: "Midfield" },
-                { name: "Dan Butler", rating: 78, position: "Forward" }, { name: "Liam Henry", rating: 78, position: "Midfield" },
-                { name: "Zak Jones", rating: 77, position: "Midfield" }, { name: "Paddy Dow", rating: 77, position: "Midfield" },
-                { name: "Cooper Sharman", rating: 76, position: "Forward" }, { name: "Dougal Howard", rating: 73, position: "Defence" },
-                { name: "Hugo Garcia", rating: 72, position: "Midfield" }
-            ]
-        },
-        "Sydney": {
-            name: "Sydney Swans",
-            initials: "SYD",
-            logo: "https://placehold.co/64x64/E01A1A/FFFFFF?text=SWANS",
-            players: [
-                { name: "Isaac Heeney", rating: 91, position: "Midfield/Forward" }, { name: "Chad Warner", rating: 90, position: "Midfield" },
-                { name: "Errol Gulden", rating: 89, position: "Midfield" }, { name: "Nick Blakey", rating: 88, position: "Defence" },
-                { name: "Brodie Grundy", rating: 87, position: "Ruck" }, { name: "Tom Papley", rating: 86, position: "Forward" },
-                { name: "James Rowbottom", rating: 86, position: "Midfield" }, { name: "Joel Amartey", rating: 85, position: "Forward/Ruck" },
-                { name: "Will Hayward", rating: 85, position: "Forward" }, { name: "Tom McCartin", rating: 83, position: "Defence" },
-                { name: "Logan McDonald", rating: 83, position: "Forward" }, { name: "Jake Lloyd", rating: 83, position: "Defence" },
-                { name: "Hayden McLean", rating: 82, position: "Forward/Ruck" }, { name: "James Jordon", rating: 82, position: "Midfield" },
-                { name: "Dane Rampe", rating: 81, position: "Defence" }, { name: "Oliver Florent", rating: 81, position: "Midfield/Defence" },
-                { name: "Sam Wicks", rating: 80, position: "Forward" }, { name: "Callum Mills", rating: 80, position: "Midfield" },
-                { name: "Justin McInerney", rating: 80, position: "Midfield" }, { name: "Matty Roberts", rating: 80, position: "Midfield" },
-                { name: "Braeden Campbell", rating: 79, position: "Midfield/Defence" }, { name: "Taylor Adams", rating: 79, position: "Midfield" },
-                { name: "Lewis Melican", rating: 77, position: "Defence" }
-            ]
-        },
-        "WestCoast": {
-            name: "West Coast Eagles",
-            initials: "WCE",
-            logo: "https://placehold.co/64x64/003087/FFC52F?text=EAGLES",
-            players: [
-                { name: "Jeremy McGovern", rating: 87, position: "Defence" }, { name: "Elliot Yeo", rating: 87, position: "Midfield" },
-                { name: "Tim Kelly", rating: 86, position: "Midfield" }, { name: "Jake Waterman", rating: 83, position: "Forward" },
-                { name: "Oscar Allen", rating: 82, position: "Forward" }, { name: "Harley Reid", rating: 82, position: "Midfield" },
-                { name: "Liam Baker", rating: 82, position: "Midfield/Forward" }, { name: "Liam Ryan", rating: 82, position: "Forward" },
-                { name: "Tom Cole", rating: 81, position: "Defence" }, { name: "Jamie Cripps", rating: 81, position: "Forward" },
-                { name: "Liam Duggan", rating: 81, position: "Defence" }, { name: "Matthew Owies", rating: 80, position: "Forward" },
-                { name: "Jayden Hunt", rating: 79, position: "Defence" }, { name: "Jack Petruccelle", rating: 79, position: "Forward" },
-                { name: "Reuben Ginbey", rating: 78, position: "Midfield/Defence" }, { name: "Jack Graham", rating: 78, position: "Midfield" },
-                { name: "Bailey Williams", rating: 78, position: "Ruck" }, { name: "Brady Hough", rating: 76, position: "Defence" },
-                { name: "Jack Williams", rating: 75, position: "Forward/Ruck" }, { name: "Harry Edwards", rating: 73, position: "Defence" },
-                { name: "Dom Sheed", rating: 72, position: "Midfield" }, { name: "Tyler Brockman", rating: 72, position: "Forward" },
-                { name: "Jack Hutchinson", rating: 72, position: "Forward" }
-            ]
-        },
-        "WesternBulldogs": {
-            name: "Western Bulldogs",
-            initials: "WB",
-            logo: "https://placehold.co/64x64/005AAd/C41230?text=DOGS",
-            players: [
-                { name: "Marcus Bontempelli", rating: 92, position: "Midfield" }, { name: "Adam Treloar", rating: 91, position: "Midfield" },
-                { name: "Tom Liberatore", rating: 89, position: "Midfield" }, { name: "Ed Richards", rating: 88, position: "Defence" },
-                { name: "Sam Darcy", rating: 87, position: "Forward/Ruck" }, { name: "Tim English", rating: 87, position: "Ruck" },
-                { name: "Bailey Dale", rating: 86, position: "Defence" }, { name: "Aaron Naughton", rating: 85, position: "Forward" },
-                { name: "Cody Weightman", rating: 85, position: "Forward" }, { name: "Bailey Williams", rating: 84, position: "Defence" },
-                { name: "Jason Johannisen", rating: 83, position: "Defence/Forward" }, { name: "Matthew Kennedy", rating: 86, position: "Midfield" },
-                { name: "Liam Jones", rating: 81, position: "Defence" }, { name: "Rory Lobb", rating: 81, position: "Forward/Ruck" },
-                { name: "Lachlan Bramble", rating: 80, position: "Midfield/Defence" }, { name: "Rhylee West", rating: 80, position: "Midfield/Forward" },
-                { name: "Ryan Gardner", rating: 80, position: "Defence" }, { name: "Ryley Sanders", rating: 78, position: "Midfield" },
-                { name: "Joel Freijah", rating: 81, position: "Midfield/Forward" }, { name: "Taylor Duryea", rating: 76, position: "Defence" },
-                { name: "Caleb Poulter", rating: 75, position: "Midfield" }, { name: "James Harmes", rating: 75, position: "Midfield" },
-                { name: "Buku Khamis", rating: 79, position: "Defence/Forward" }
-            ]
-        }
-    };
-
-    // --- GLOBAL STATE & MAPPINGS ---
-    let playerTeamMap = {};
-    let seasonStats = {};
-    
-    // --- DOM ELEMENTS ---
-    const homeTeamSelect = document.getElementById('homeTeamSelect');
-    const awayTeamSelect = document.getElementById('awayTeamSelect');
-    const simulateBtn = document.getElementById('simulateBtn');
-    const resultsContainer = document.getElementById('resultsContainer');
-    const finalScoreboard = document.getElementById('finalScoreboard');
-    const homeFinalDisplay = document.getElementById('homeFinalDisplay');
-    const awayFinalDisplay = document.getElementById('awayFinalDisplay');
-    const quarterByQuarterScores = document.getElementById('quarterByQuarterScores');
-    const commentaryLog = document.getElementById('commentaryLog');
-    const errorMessage = document.getElementById('error-message');
-    const commentaryTab = document.getElementById('commentaryTab');
-    const statsTab = document.getElementById('statsTab');
-    const commentaryPanel = document.getElementById('commentaryPanel');
-    const statsPanel = document.getElementById('statsPanel');
-    const homePlayerStats = document.getElementById('homePlayerStats');
-    const awayPlayerStats = document.getElementById('awayPlayerStats');
-    const homeStatsTitle = document.getElementById('homeStatsTitle');
-    const awayStatsTitle = document.getElementById('awayStatsTitle');
-    const gameStatus = document.getElementById('gameStatus');
-    const ladderContainer = document.getElementById('ladderContainer');
-    const statTrackerContainer = document.getElementById('statTrackerContainer');
-
-    // --- FUNCTIONS ---
-
-    /**
-     * Populates the team selection dropdowns.
-     */
-    function populateTeamSelects() {
-        const teamKeys = Object.keys(teams).sort((a, b) => teams[a].name.localeCompare(teams[b].name));
-        
-        teamKeys.forEach(teamKey => {
-            const optionHome = document.createElement('option');
-            optionHome.value = teamKey;
-            optionHome.textContent = teams[teamKey].name;
-            homeTeamSelect.appendChild(optionHome);
-
-            const optionAway = document.createElement('option');
-            optionAway.value = teamKey;
-            optionAway.textContent = teams[teamKey].name;
-            awayTeamSelect.appendChild(optionAway);
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
         });
-        if (teamKeys.length > 1) {
-            homeTeamSelect.value = teamKeys[0];
-            awayTeamSelect.value = teamKeys[1];
-        }
-    }
 
-    /**
-     * Calculates a team's average rating.
-     */
-    function calculateTeamAverage(team) {
-        const totalRating = team.players.reduce((sum, player) => sum + player.rating, 0);
-        return totalRating / team.players.length;
-    }
-    
-    /**
-     * Selects a player from a team to be the shooter, weighted by rating and position.
-     * Forwards are heavily favored.
-     */
-    function getShootingPlayer(team) {
-        const weightedList = [];
-        team.players.forEach(player => {
-            let weight = player.rating; // Base weight on rating
-            
-            // Apply multipliers based on position
-            if (player.position) {
-                if (player.position.includes('Forward')) {
-                    weight *= 3.0; // Strong boost for forwards
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                // Hide mobile menu on click
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
                 }
-                if (player.position.includes('Midfield')) {
-                    weight *= 1.5; // Moderate boost for midfielders
-                }
-                if (player.position.includes('Ruck')) {
-                    weight *= 1.1; // Slight chance for rucks
-                }
-                if (player.position.includes('Defence')) {
-                    weight *= 0.2; // Heavily reduce chance for defenders
-                }
-            }
-            weightedList.push({ player, weight });
-        });
-
-        const totalWeight = weightedList.reduce((sum, item) => sum + item.weight, 0);
-        let randomWeight = Math.random() * totalWeight;
-
-        for (const item of weightedList) {
-            randomWeight -= item.weight;
-            if (randomWeight <= 0) {
-                return item.player;
-            }
-        }
-        return team.players[team.players.length - 1]; // Fallback
-    }
-
-
-    /**
-     * Distributes a fixed pool of disposals among players based on weight.
-     */
-    function distributeDisposals(team, playerStats, weather) {
-        let baseDisposals = Math.floor(Math.random() * 51) + 350; // 350-400
-        if (weather === 'Wet') {
-            baseDisposals *= 0.85; // 15% reduction in wet weather
-        }
-        
-        const totalTeamDisposals = Math.round(baseDisposals);
-        let disposalsAlreadyAccounted = 0;
-        
-        // Account for disposals from scoring shots first
-        team.players.forEach(player => {
-            disposalsAlreadyAccounted += playerStats[player.name].disposals;
-        });
-
-        let remainingDisposals = totalTeamDisposals - disposalsAlreadyAccounted;
-        if (remainingDisposals < 0) remainingDisposals = 0;
-
-        const weightedList = [];
-        let totalWeight = 0;
-        team.players.forEach(player => {
-            let weight = Math.pow(player.rating, 2); // Square rating for more separation
-            if (player.position && player.position.includes('Midfield')) {
-                weight *= 2.5; // Heavy boost for midfielders
-            } else if (player.position && player.position.includes('Ruck')) {
-                weight *= 1.5;
-            } else if (player.position && player.position.includes('Defence')) {
-                weight *= 1.2;
-            }
-            weightedList.push({ name: player.name, weight });
-            totalWeight += weight;
-        });
-
-        weightedList.forEach(item => {
-            const share = (item.weight / totalWeight) * remainingDisposals;
-            playerStats[item.name].disposals += Math.round(share);
-        });
-    }
-
-    /**
-     * Simulates a single quarter, now only tracking scores.
-     * Disposals are handled separately after all quarters are simulated.
-     */
-    async function simulateQuarter(homeTeam, awayTeam, quarterNumber, totalScore, playerStats, weather, isSeasonGame) {
-        const homeAvg = calculateTeamAverage(homeTeam);
-        const awayAvg = calculateTeamAverage(awayTeam);
-        let contestsPerQuarter = 40; 
-        if(weather === 'Wet') {
-            contestsPerQuarter = 35; // Fewer fluid passages of play in the wet
-        }
-
-        const quarterResult = {
-            home: { goals: 0, behinds: 0 },
-            away: { goals: 0, behinds: 0 },
-            commentary: [],
-        };
-        
-        gameStatus.textContent = `Q${quarterNumber}`;
-
-        const contestWinProbability = 0.5 + ((homeAvg - awayAvg) / 100); 
-
-        for (let i = 0; i < contestsPerQuarter; i++) {
-            let contestWinningTeam, shootingPlayer;
-            if (Math.random() < contestWinProbability) {
-                contestWinningTeam = homeTeam;
-            } else {
-                contestWinningTeam = awayTeam;
-            }
-            
-            const chanceOfShot = (calculateTeamAverage(contestWinningTeam) / 275); // Tuned for more realistic scores
-            if (Math.random() < chanceOfShot) {
-                shootingPlayer = getShootingPlayer(contestWinningTeam);
-                
-                let goalAccuracy = 0.45 + ((shootingPlayer.rating - 80) / 100);
-
-                // Apply weather effects
-                if (weather === 'Wet') {
-                    goalAccuracy *= 0.8; // 20% harder to kick goals in the wet
-                } else if (weather === 'Windy') {
-                    // Wind affects one team per half
-                    const windyDisadvantage = (quarterNumber <= 2 && contestWinningTeam === homeTeam) || (quarterNumber > 2 && contestWinningTeam === awayTeam);
-                    if (windyDisadvantage) {
-                         goalAccuracy *= 0.75; // 25% penalty kicking into the wind
-                    }
-                }
-
-
-                playerStats[shootingPlayer.name].disposals++;
-
-                if (Math.random() < goalAccuracy) {
-                    if (contestWinningTeam === homeTeam) {
-                        totalScore.home.goals++;
-                        quarterResult.home.goals++;
-                    } else {
-                         totalScore.away.goals++;
-                         quarterResult.away.goals++;
-                    }
-                    playerStats[shootingPlayer.name].goals++;
-                    let goalCommentary = `GOAL - ${shootingPlayer.name} (${contestWinningTeam.name})!`;
-                    if (shootingPlayer.rating >= 88) {
-                       goalCommentary = `GOAL! A touch of class from ${shootingPlayer.name} (${contestWinningTeam.name})!`;
-                    }
-                    quarterResult.commentary.push(goalCommentary);
-                } else {
-                     if (contestWinningTeam === homeTeam) {
-                        totalScore.home.behinds++;
-                        quarterResult.home.behinds++;
-                    } else {
-                         totalScore.away.behinds++;
-                         quarterResult.away.behinds++;
-                    }
-                    playerStats[shootingPlayer.name].behinds++;
-                }
-                
-                // Update live scoreboard after each score
-                updateLiveScoreboard(homeTeam, awayTeam, totalScore);
-                 if (!isSeasonGame) {
-                    await sleep(100); // Only do short delay for single match mode for performance
-                 }
-            }
-        }
-        
-        const homeQuarterPoints = quarterResult.home.goals * 6 + quarterResult.home.behinds;
-        const awayQuarterPoints = quarterResult.away.goals * 6 + quarterResult.away.behinds;
-        
-        let summaryText;
-        if (homeQuarterPoints > awayQuarterPoints + 10) {
-            summaryText = `Q${quarterNumber} Summary: ${homeTeam.name} dominated that term.`;
-        } else if (awayQuarterPoints > homeQuarterPoints + 10) {
-            summaryText = `Q${quarterNumber} Summary: A huge quarter from ${awayTeam.name}.`;
-        } else if (Math.abs(homeQuarterPoints - awayQuarterPoints) < 7) {
-            summaryText = `Q${quarterNumber} Summary: A real arm-wrestle of a quarter.`;
-        } else {
-            summaryText = `Q${quarterNumber} Summary: Solid quarter with both sides having moments.`;
-        }
-        quarterResult.commentary.unshift(summaryText);
-
-        return quarterResult;
-    }
-    
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    function initializePlayerStats(homeTeam, awayTeam) {
-        const stats = {};
-        [...homeTeam.players, ...awayTeam.players].forEach(player => {
-            stats[player.name] = { disposals: 0, goals: 0, behinds: 0 };
-        });
-        return stats;
-    }
-
-    /**
-     * Updates the main scoreboard in real-time.
-     */
-    function updateLiveScoreboard(homeTeam, awayTeam, currentScore) {
-        const homePoints = currentScore.home.goals * 6 + currentScore.home.behinds;
-        const awayPoints = currentScore.away.goals * 6 + currentScore.away.behinds;
-
-        homeFinalDisplay.innerHTML = `
-            <img src="${homeTeam.logo}" alt="${homeTeam.name}" class="team-logo mx-auto mb-2" onerror="this.src='https://placehold.co/64x64/333/fff?text=ERR'">
-            <div class="text-2xl font-bold">${homeTeam.name}</div>
-            <div class="text-4xl font-black text-indigo-400">${homePoints}</div>
-            <div class="text-gray-400">${currentScore.home.goals}.${currentScore.home.behinds}</div>`;
-        
-        awayFinalDisplay.innerHTML = `
-            <img src="${awayTeam.logo}" alt="${awayTeam.name}" class="team-logo mx-auto mb-2" onerror="this.src='https://placehold.co/64x64/333/fff?text=ERR'">
-            <div class="text-2xl font-bold">${awayTeam.name}</div>
-            <div class="text-4xl font-black text-indigo-400">${awayPoints}</div>
-            <div class="text-gray-400">${currentScore.away.goals}.${currentScore.away.behinds}</div>`;
-    }
-
-
-    async function runSimulation(homeTeamKey, awayTeamKey, isSeasonGame = false) {
-       
-        if (!isSeasonGame) { // Only check for single match mode
-            if (homeTeamKey === awayTeamKey) {
-                errorMessage.textContent = 'Please select two different teams.';
-                return;
-            }
-        }
-        errorMessage.textContent = '';
-        
-        simulateBtn.disabled = true;
-        if(document.getElementById('simRoundBtn')) {
-            document.getElementById('simRoundBtn').disabled = true;
-        }
-        
-        if (!isSeasonGame) {
-             resultsContainer.classList.remove('hidden');
-        }
-       
-        commentaryLog.innerHTML = '';
-        homePlayerStats.innerHTML = '<table class="w-full"></table>';
-        awayPlayerStats.innerHTML = '<table class="w-full"></table>';
-        quarterByQuarterScores.innerHTML = '';
-        gameStatus.textContent = "Q1";
-        gameStatus.classList.add('animate-pulse');
-        
-        const homeGroundAdvantage = document.getElementById('homeGroundAdvantage').checked;
-        const homeTeamData = JSON.parse(JSON.stringify(teams[homeTeamKey]));
-        const awayTeamData = JSON.parse(JSON.stringify(teams[awayTeamKey]));
-        
-        if (homeGroundAdvantage && !isSeasonGame) { // HGA only for single match for now
-            homeTeamData.players.forEach(player => player.rating += 2);
-        }
-
-        const weatherRand = Math.random();
-        let weather = 'Dry';
-        if (weatherRand < 0.2) weather = 'Wet';
-        else if (weatherRand < 0.4) weather = 'Windy';
-        
-        if (!isSeasonGame) {
-            document.getElementById('conditionsPanel').classList.remove('hidden');
-            document.getElementById('weatherDisplay').textContent = weather;
-        }
-
-        const playerStats = initializePlayerStats(homeTeamData, awayTeamData);
-
-        let totalScore = {
-            home: { goals: 0, behinds: 0, points: 0 },
-            away: { goals: 0, behinds: 0, points: 0 }
-        };
-        
-        updateLiveScoreboard(homeTeamData, awayTeamData, totalScore);
-
-        let quarterScoresHTML = `
-            <table class="w-full text-center bg-gray-800/50 rounded-lg">
-                <thead class="bg-gray-700/70"><tr>
-                    <th class="p-3 font-semibold">Quarter</th>
-                    <th class="p-3 font-semibold">${homeTeamData.name}</th>
-                    <th class="p-3 font-semibold">${awayTeamData.name}</th>
-                </tr></thead><tbody>`;
-
-        for (let q = 1; q <= 4; q++) {
-            const quarterResult = await simulateQuarter(homeTeamData, awayTeamData, q, totalScore, playerStats, weather, isSeasonGame);
-            
-            const homeQScore = `${quarterResult.home.goals}.${quarterResult.home.behinds} (${quarterResult.home.goals * 6 + quarterResult.home.behinds})`;
-            const awayQScore = `${quarterResult.away.goals}.${quarterResult.away.behinds} (${quarterResult.away.goals * 6 + quarterResult.away.behinds})`;
-
-            quarterScoresHTML += `<tr class="border-b border-gray-700">
-                <td class="p-3 font-bold">Q${q}</td><td class="p-3">${homeQScore}</td><td class="p-3">${awayQScore}</td>
-            </tr>`;
-            
-            quarterResult.commentary.forEach(eventText => {
-                const p = document.createElement('p');
-                p.textContent = eventText;
-                if (eventText.startsWith('Q')) p.className = "font-bold pt-2 text-indigo-300";
-                commentaryLog.appendChild(p);
-            });
-            commentaryLog.scrollTop = commentaryLog.scrollHeight;
-            
-            if (!isSeasonGame) await sleep(1000); // Only pause between quarters for single games
-        }
-        
-        distributeDisposals(homeTeamData, playerStats, weather);
-        distributeDisposals(awayTeamData, playerStats, weather);
-
-        totalScore.home.points = totalScore.home.goals * 6 + totalScore.home.behinds;
-        totalScore.away.points = totalScore.away.goals * 6 + totalScore.away.behinds;
-
-        quarterScoresHTML += `<tfoot class="bg-gray-700/70 font-bold"><tr>
-            <td class="p-3">Final</td>
-            <td class="p-3">${totalScore.home.goals}.${totalScore.home.behinds} (${totalScore.home.points})</td>
-            <td class="p-3">${totalScore.away.goals}.${totalScore.away.behinds} (${totalScore.away.points})</td>
-        </tr></tfoot></tbody></table>`;
-
-        quarterByQuarterScores.innerHTML = quarterScoresHTML;
-        
-        const detailedResult = {
-            score: totalScore,
-            stats: playerStats,
-            qtrScores: quarterScoresHTML,
-            commentary: commentaryLog.innerHTML,
-            votes: null
-        };
-
-        // Only calculate Brownlow votes for home and away games
-        if (isSeasonGame && seasonState.mode === 'HOME_AND_AWAY') {
-            const allPlayersInMatch = [...homeTeamData.players, ...awayTeamData.players];
-            const voteContenders = allPlayersInMatch.map(player => {
-                const stats = playerStats[player.name];
-                const voteScore = (stats.disposals || 0) + ((stats.goals || 0) * 5) + (player.rating / 10);
-                return { name: player.name, score: voteScore };
-            });
-
-            voteContenders.sort((a, b) => b.score - a.score);
-            
-            if(voteContenders.length >= 3) {
-                detailedResult.votes = {
-                    three: voteContenders[0].name,
-                    two: voteContenders[1].name,
-                    one: voteContenders[2].name
-                };
-            }
-        }
-
-
-        if(isSeasonGame) {
-            return detailedResult;
-        }
-
-        displayFinalResult(homeTeamData, awayTeamData, totalScore);
-        displayPlayerStats(homeTeamData, awayTeamData, playerStats);
-        
-        resultsContainer.classList.remove('hidden');
-        simulateBtn.disabled = false;
-    }
-
-    /**
-     * Renders player stats into tables.
-     */
-    function displayPlayerStats(homeTeam, awayTeam, playerStats) {
-        homeStatsTitle.textContent = homeTeam.name;
-        awayStatsTitle.textContent = awayTeam.name;
-
-        const sortPlayers = (team) => [...team.players].sort((a,b) => playerStats[b.name].disposals - playerStats[a.name].disposals);
-
-        homePlayerStats.innerHTML = createStatsTable(sortPlayers(homeTeam), playerStats);
-        awayPlayerStats.innerHTML = createStatsTable(sortPlayers(awayTeam), playerStats);
-    }
-
-    function createStatsTable(players, playerStats) {
-        let tableHTML = `<table class="w-full text-left"><thead class="border-b border-gray-600"><tr>
-            <th class="p-1">Player</th><th class="p-1 text-center">D</th><th class="p-1 text-center">G</th><th class="p-1 text-center">B</th>
-        </tr></thead><tbody>`;
-
-        players.forEach(player => {
-            const stats = playerStats[player.name];
-            tableHTML += `<tr class="border-b border-gray-700/50">
-                <td class="p-1">${player.name}</td>
-                <td class="p-1 text-center">${stats.disposals}</td>
-                <td class="p-1 text-center">${stats.goals}</td>
-                <td class="p-1 text-center">${stats.behinds}</td>
-            </tr>`;
-        });
-
-        return tableHTML + `</tbody></table>`;
-    }
-
-    /**
-     * Displays final results and winner.
-     */
-    function displayFinalResult(homeTeam, awayTeam, totalScore) {
-        gameStatus.classList.remove('animate-pulse');
-        gameStatus.textContent = "FT";
-        
-        let winnerText;
-        if (totalScore.home.points > totalScore.away.points) winnerText = `${homeTeam.name} win!`;
-        else if (totalScore.away.points > totalScore.home.points) winnerText = `${awayTeam.name} win!`;
-        else winnerText = "It's a draw!";
-        
-        updateLiveScoreboard(homeTeam, awayTeam, totalScore);
-
-        const p = document.createElement('p');
-        p.className = 'font-bold text-lg text-center pt-4 text-amber-300';
-        p.textContent = `And that's the final siren! ${winnerText}`;
-        commentaryLog.appendChild(p);
-        commentaryLog.scrollTop = commentaryLog.scrollHeight;
-    }
-    
-    // --- SEASON MODE ---
-    let seasonState = {
-        fixture: [],
-        ladder: {},
-        currentRound: 0,
-        viewedRound: 0,
-        mode: 'PRE_SEASON', // 'PRE_SEASON', 'HOME_AND_AWAY', or 'FINALS'
-    };
-    
-    /**
-     * Generates a 23-round fixture where every team plays one game per round.
-     * This version uses a constructive algorithm (Circle Method) to guarantee full rounds.
-     * Guarantees each team plays every other team at least once, and no more than twice.
-     */
-    function generateFixture() {
-        const teamKeys = [...Object.keys(teams)];
-        const numTeams = teamKeys.length;
-        const seasonRounds = 23;
-
-        // Helper function to generate a full round-robin schedule using the Circle Method.
-        // This creates (n-1) rounds for n teams. For 18 teams, this is 17 rounds.
-        const createRoundRobin = (shuffledTeamKeys) => {
-            const rounds = [];
-            const n = shuffledTeamKeys.length;
-            if (n % 2 !== 0) return []; // Algorithm requires an even number of teams.
-
-            const mid = n / 2;
-            const teamsToRotate = shuffledTeamKeys.slice(1);
-
-            for (let r = 0; r < n - 1; r++) {
-                const roundMatches = [];
-                // The first team is anchored and plays the team that rotates to the top.
-                roundMatches.push([shuffledTeamKeys[0], teamsToRotate[0]]);
-
-                // Pair up the other teams.
-                for (let i = 1; i < mid; i++) {
-                    roundMatches.push([teamsToRotate[i], teamsToRotate[n - 1 - i]]);
-                }
-                rounds.push(roundMatches);
-
-                // Rotate the array for the next round (move last element to the front).
-                teamsToRotate.unshift(teamsToRotate.pop());
-            }
-            return rounds;
-        };
-
-        // --- 1. Generate the primary 17-round fixture ---
-        teamKeys.sort(() => 0.5 - Math.random()); // Initial shuffle for variety.
-        const roundRobin17 = createRoundRobin(teamKeys);
-        
-        const first17Rounds = roundRobin17.map(round => {
-            const matches = round.map(matchup => {
-                // Randomly assign home and away for the first encounter.
-                return (Math.random() > 0.5) ?
-                    { home: matchup[0], away: matchup[1], detailedResult: null } :
-                    { home: matchup[1], away: matchup[0], detailedResult: null };
-            });
-            return { matches, byes: [] };
-        });
-
-        // --- 2. Generate the extra 6 rounds for the season ---
-        // We create another full round-robin and just take the first 6 rounds from it.
-        teamKeys.sort(() => 0.5 - Math.random()); // Re-shuffle teams for a different set of repeat matchups.
-        const repeatRoundRobin = createRoundRobin(teamKeys);
-        const extra6RoundsData = repeatRoundRobin.slice(0, seasonRounds - 17); // Take the first 6.
-
-        const extra6Rounds = extra6RoundsData.map(round => {
-            const matches = round.map(matchup => {
-                // Find the first time this pair played to determine the reverse fixture.
-                let firstEncounter = null;
-                for (const r of first17Rounds) {
-                    firstEncounter = r.matches.find(m => 
-                        (m.home === matchup[0] && m.away === matchup[1]) ||
-                        (m.home === matchup[1] && m.away === matchup[0])
-                    );
-                    if (firstEncounter) break;
-                }
-                
-                // The return leg MUST have reversed home/away status.
-                return { home: firstEncounter.away, away: firstEncounter.home, detailedResult: null };
-            });
-            return { matches, byes: [] };
-        });
-
-        // --- 3. Combine and shuffle the final 23 rounds ---
-        let finalFixture = [...first17Rounds, ...extra6Rounds];
-        finalFixture.sort(() => 0.5 - Math.random()); // Shuffle the order of the 23 rounds.
-
-        return finalFixture;
-    }
-
-
-    function initializeLadder() {
-        const ladder = {};
-        Object.keys(teams).forEach(key => {
-            ladder[key] = { played: 0, wins: 0, losses: 0, draws: 0, aFor: 0, against: 0, percentage: 100, points: 0 };
-        });
-        return ladder;
-    }
-
-    function renderLadder() {
-        const sortedLadder = Object.entries(seasonState.ladder).sort(([,a], [,b]) => {
-            if (b.points !== a.points) return b.points - a.points;
-            return b.percentage - a.percentage;
-        });
-
-        let ladderHTML = `<table class="w-full text-left">
-            <thead class="border-b-2 border-gray-500">
-                <tr>
-                    <th class="p-1">#</th><th class="p-1">Team</th><th class="p-1 text-center">P</th><th class="p-1 text-center">W</th><th class="p-1 text-center">L</th><th class="p-1 text-center">D</th><th class="p-1 text-center">Pts</th><th class="p-1 text-center">%</th>
-                </tr>
-            </thead><tbody>`;
-        
-        sortedLadder.forEach(([key, team], index) => {
-            ladderHTML += `<tr class="border-b border-gray-600/50">
-                <td class="p-1 font-bold">${index + 1}</td>
-                <td class="p-1 flex items-center space-x-2"><img src="${teams[key].logo}" class="team-logo">${teams[key].name}</td>
-                <td class="p-1 text-center">${team.played}</td>
-                <td class="p-1 text-center">${team.wins}</td>
-                <td class="p-1 text-center">${team.losses}</td>
-                <td class="p-1 text-center">${team.draws}</td>
-                <td class="p-1 text-center font-bold">${team.points}</td>
-                <td class="p-1 text-center">${team.percentage.toFixed(2)}</td>
-            </tr>`;
-        });
-        ladderHTML += '</tbody></table>';
-        ladderContainer.innerHTML = ladderHTML;
-    }
-    
-    function renderFixture() {
-        if (seasonState.mode === 'PRE_SEASON') return;
-        
-        let round;
-        let title;
-        const fixtureToUse = (seasonState.mode === 'HOME_AND_AWAY') ? seasonState.fixture : seasonState.finalsFixture;
-
-        round = fixtureToUse[seasonState.viewedRound];
-        
-        if (seasonState.mode === 'HOME_AND_AWAY') {
-            title = `Round ${seasonState.viewedRound + 1}`;
-        } else { // FINALS
-            const weekTitles = ["Qualifying & Elimination Finals", "Semi Finals", "Preliminary Finals", "Grand Final"];
-            title = weekTitles[seasonState.viewedRound];
-        }
-
-        if (!round) {
-             document.getElementById('fixtureContainer').innerHTML = '<p class="text-center font-bold text-green-400">Season Complete!</p>';
-             document.getElementById('simRoundBtn').disabled = true;
-             return;
-        }
-
-        document.getElementById('roundTitle').textContent = title;
-        let fixtureHTML = '<ul class="space-y-2">';
-        round.matches.forEach((match, index) => {
-            const home = teams[match.home].name;
-            const away = teams[match.away].name;
-            let resultText = "VS";
-            let resultClass = "text-gray-400";
-            if (match.detailedResult) {
-                const score = match.detailedResult.score;
-                resultText = `${score.home.points} - ${score.away.points}`;
-                if (score.home.points > score.away.points) {
-                    resultClass = "text-green-400";
-                } else if (score.away.points > score.home.points) {
-                    resultClass = "text-red-400";
-                }
-            }
-            fixtureHTML += `<li class="fixture-match flex justify-between items-center p-2 bg-gray-800 rounded-lg hover:bg-indigo-700 transition cursor-pointer" 
-                                data-match-index="${index}">
-                <span class="w-2/5 text-right font-semibold">${home}</span>
-                <span class="w-1/5 text-center font-bold ${resultClass}">${resultText}</span>
-                <span class="w-2/5 text-left font-semibold">${away}</span>
-            </li>`;
-        });
-        if(round.byes && round.byes.length > 0) {
-            fixtureHTML += `<li class="mt-4 p-2 text-center text-gray-400"><strong>Byes:</strong> ${round.byes.map(t => teams[t].name).join(', ')}</li>`;
-        }
-        fixtureHTML += '</ul>';
-        document.getElementById('fixtureContainer').innerHTML = fixtureHTML;
-        
-        const lastRoundIndex = fixtureToUse.length - 1;
-        document.getElementById('prevRoundBtn').disabled = seasonState.viewedRound === 0;
-        document.getElementById('nextRoundBtn').disabled = seasonState.viewedRound >= seasonState.currentRound || seasonState.viewedRound >= lastRoundIndex;
-        
-        const currentRoundData = fixtureToUse[seasonState.currentRound];
-        const currentRoundIsFinished = currentRoundData?.matches.every(m => m.detailedResult);
-        document.getElementById('simRoundBtn').disabled = seasonState.viewedRound !== seasonState.currentRound || currentRoundIsFinished;
-    }
-
-    function updateLadder(homeKey, awayKey, result) {
-        const home = seasonState.ladder[homeKey];
-        const away = seasonState.ladder[awayKey];
-
-        home.played++;
-        away.played++;
-        home.aFor += result.score.home.points;
-        home.against += result.score.away.points;
-        away.aFor += result.score.away.points;
-        away.against += result.score.home.points;
-
-        if (result.score.home.points > result.score.away.points) {
-            home.wins++;
-            away.losses++;
-            home.points += 4;
-        } else if (result.score.away.points > result.score.home.points) {
-            away.wins++;
-            home.losses++;
-            away.points += 4;
-        } else {
-            home.draws++;
-            away.draws++;
-            home.points += 2;
-            away.points += 2;
-        }
-        
-        home.percentage = (home.against === 0) ? home.aFor * 100 : (home.aFor / home.against) * 100;
-        away.percentage = (away.against === 0) ? away.aFor * 100 : (away.aFor / away.against) * 100;
-        
-        renderLadder();
-    }
-    
-    async function handleFixtureClick(event) {
-        const matchEl = event.target.closest('.fixture-match');
-        if (!matchEl) return;
-        
-        const matchIndex = parseInt(matchEl.dataset.matchIndex);
-        const fixture = (seasonState.mode === 'HOME_AND_AWAY') ? seasonState.fixture : seasonState.finalsFixture;
-        const round = fixture[seasonState.viewedRound];
-        const matchData = round.matches[matchIndex];
-
-        document.querySelectorAll('.fixture-match').forEach(el => el.classList.remove('active'));
-        matchEl.classList.add('active');
-
-        resultsContainer.classList.remove('hidden');
-        document.getElementById('resultsTitle').textContent = `${document.getElementById('roundTitle').textContent} Match Centre`;
-
-
-        if (matchData.detailedResult) {
-            displayFinalResult(teams[matchData.home], teams[matchData.away], matchData.detailedResult.score);
-            displayPlayerStats(teams[matchData.home], teams[matchData.away], matchData.detailedResult.stats);
-            quarterByQuarterScores.innerHTML = matchData.detailedResult.qtrScores;
-            commentaryLog.innerHTML = matchData.detailedResult.commentary;
-        } else {
-            simRoundBtn.disabled = true;
-            prevRoundBtn.disabled = true;
-            nextRoundBtn.disabled = true;
-            const detailedResult = await runSimulation(matchData.home, matchData.away, true);
-            matchData.detailedResult = detailedResult;
-            if (seasonState.mode === 'HOME_AND_AWAY') {
-                updateLadder(matchData.home, matchData.away, detailedResult);
-                updateSeasonStats(detailedResult);
-                updateStatTrackers();
-            }
-            renderFixture();
-            document.querySelector(`[data-match-index='${matchIndex}']`).classList.add('active');
-            simRoundBtn.disabled = false;
-        }
-    }
-    
-    async function handleSimRound() {
-        const fixture = (seasonState.mode === 'HOME_AND_AWAY') ? seasonState.fixture : seasonState.finalsFixture;
-        const round = fixture[seasonState.currentRound];
-        if (!round) return;
-
-        simRoundBtn.disabled = true;
-        prevRoundBtn.disabled = true;
-        nextRoundBtn.disabled = true;
-        resultsContainer.classList.remove('hidden');
-
-        for(let i = 0; i < round.matches.length; i++) {
-             const match = round.matches[i];
-             if(!match.detailedResult) {
-                document.getElementById('resultsTitle').textContent = `Simulating: ${teams[match.home].name} vs ${teams[match.away].name}`;
-                renderFixture(); // Re-render to show active match
-                document.querySelector(`[data-match-index='${i}']`).classList.add('active');
-                
-                const detailedResult = await runSimulation(match.home, match.away, true);
-                match.detailedResult = detailedResult;
-                
-                if(seasonState.mode === 'HOME_AND_AWAY') {
-                    updateLadder(match.home, match.away, detailedResult);
-                    updateSeasonStats(detailedResult);
-                }
-                
-                displayFinalResult(teams[match.home], teams[match.away], detailedResult.score);
-                displayPlayerStats(teams[match.home], teams[match.away], detailedResult.stats);
-                quarterByQuarterScores.innerHTML = detailedResult.qtrScores;
-                commentaryLog.innerHTML = detailedResult.commentary;
-                renderFixture();
-                await sleep(500); // Shortened sleep for quicker round sim
-             }
-        }
-        
-        if(seasonState.mode === 'HOME_AND_AWAY') {
-            updateStatTrackers(); // Update trackers once at the end of the round
-        }
-
-        seasonState.currentRound++;
-        seasonState.viewedRound = seasonState.currentRound;
-        
-        if(seasonState.mode === 'HOME_AND_AWAY' && seasonState.currentRound >= seasonState.fixture.length) {
-            startFinals();
-        } else if (seasonState.mode === 'FINALS' && seasonState.currentRound <= seasonState.finalsFixture.length && seasonState.currentRound < 4) {
-            generateNextFinalsWeek();
-            renderFixture();
-            resultsContainer.classList.add('hidden');
-        } else if (seasonState.mode === 'FINALS' && seasonState.currentRound >= seasonState.finalsFixture.length) {
-             const grandFinalWinner = getWinner(round.matches[0].home, round.matches[0].away, round.matches[0].detailedResult.score);
-             document.getElementById('resultsTitle').textContent = `🏆 ${teams[grandFinalWinner].name} are the AFL Premiers! 🏆`;
-             simRoundBtn.disabled = true;
-             prevRoundBtn.disabled = true;
-             nextRoundBtn.disabled = true;
-             setTimeout(calculateAndDisplayAwards, 2000); // Display awards after GF
-        } else {
-            renderFixture();
-            resultsContainer.classList.add('hidden');
-        }
-    }
-    
-    const getWinner = (home, away, score) => score.home.points > score.away.points ? home : away;
-    const getLoser = (home, away, score) => score.home.points < score.away.points ? home : away;
-
-    function generateNextFinalsWeek() {
-        if(seasonState.mode !== 'FINALS') return;
-        
-        const lastWeek = seasonState.finalsFixture[seasonState.currentRound - 1];
-        if (!lastWeek) return;
-
-        let nextWeekMatches = [];
-
-        // Generate Week 2: Semi Finals
-        if (seasonState.currentRound === 1) {
-            const week1Matches = seasonState.finalsFixture[0].matches;
-            const qf1 = week1Matches.find(m => m.home === seasonState.top8[0] || m.away === seasonState.top8[0]);
-            const qf2 = week1Matches.find(m => m.home === seasonState.top8[1] || m.away === seasonState.top8[1]);
-            const ef1 = week1Matches.find(m => m.home === seasonState.top8[4] || m.away === seasonState.top8[4]);
-            const ef2 = week1Matches.find(m => m.home === seasonState.top8[5] || m.away === seasonState.top8[5]);
-
-            const qf1Loser = getLoser(qf1.home, qf1.away, qf1.detailedResult.score);
-            const qf2Loser = getLoser(qf2.home, qf2.away, qf2.detailedResult.score);
-            const ef1Winner = getWinner(ef1.home, ef1.away, ef1.detailedResult.score);
-            const ef2Winner = getWinner(ef2.home, ef2.away, ef2.detailedResult.score);
-
-            nextWeekMatches.push({ home: qf1Loser, away: ef1Winner, detailedResult: null, type: 'SF' });
-            nextWeekMatches.push({ home: qf2Loser, away: ef2Winner, detailedResult: null, type: 'SF' });
-        }
-        // Generate Week 3: Preliminary Finals
-        else if (seasonState.currentRound === 2) {
-            const week1Matches = seasonState.finalsFixture[0].matches;
-            const semiFinalMatches = seasonState.finalsFixture[1].matches;
-
-            const qf1Winner = getWinner(
-                week1Matches.find(m => m.home === seasonState.top8[0] || m.away === seasonState.top8[0]).home,
-                week1Matches.find(m => m.home === seasonState.top8[0] || m.away === seasonState.top8[0]).away,
-                week1Matches.find(m => m.home === seasonState.top8[0] || m.away === seasonState.top8[0]).detailedResult.score
-            );
-            const qf2Winner = getWinner(
-                week1Matches.find(m => m.home === seasonState.top8[1] || m.away === seasonState.top8[1]).home,
-                week1Matches.find(m => m.home === seasonState.top8[1] || m.away === seasonState.top8[1]).away,
-                week1Matches.find(m => m.home === seasonState.top8[1] || m.away === seasonState.top8[1]).detailedResult.score
-            );
-            
-            const sf1Winner = getWinner(semiFinalMatches[0].home, semiFinalMatches[0].away, semiFinalMatches[0].detailedResult.score);
-            const sf2Winner = getWinner(semiFinalMatches[1].home, semiFinalMatches[1].away, semiFinalMatches[1].detailedResult.score);
-
-            nextWeekMatches.push({ home: qf1Winner, away: sf2Winner, detailedResult: null, type: 'PF' });
-            nextWeekMatches.push({ home: qf2Winner, away: sf1Winner, detailedResult: null, type: 'PF' });
-        }
-        // Generate Week 4: Grand Final
-        else if (seasonState.currentRound === 3) {
-            const prelimMatches = seasonState.finalsFixture[2].matches;
-            const pf1Winner = getWinner(prelimMatches[0].home, prelimMatches[0].away, prelimMatches[0].detailedResult.score);
-            const pf2Winner = getWinner(prelimMatches[1].home, prelimMatches[1].away, prelimMatches[1].detailedResult.score);
-
-            // For the Grand Final, we can determine "home" team by higher ladder position
-            const pf1WinnerRank = seasonState.top8.indexOf(pf1Winner);
-            const pf2WinnerRank = seasonState.top8.indexOf(pf2Winner);
-
-            if(pf1WinnerRank < pf2WinnerRank) {
-                 nextWeekMatches.push({ home: pf1Winner, away: pf2Winner, detailedResult: null, type: 'GF' });
-            } else {
-                 nextWeekMatches.push({ home: pf2Winner, away: pf1Winner, detailedResult: null, type: 'GF' });
-            }
-        }
-
-        if(nextWeekMatches.length > 0){
-            seasonState.finalsFixture.push({ matches: nextWeekMatches, byes: [] });
-        }
-    }
-
-
-    function startFinals() {
-        seasonState.mode = 'FINALS';
-        simRoundBtn.textContent = 'Simulate Finals Week';
-        const sortedLadder = Object.entries(seasonState.ladder).sort(([,a], [,b]) => {
-            if (b.points !== a.points) {
-                return b.points - a.points;
-            }
-            return b.percentage - a.percentage;
-        });
-
-        const top8 = sortedLadder.slice(0, 8).map(([key]) => key);
-        seasonState.top8 = top8; // Store for later reference
-
-        const finalsFixture = [];
-        const week1 = {
-            matches: [
-                // QF1: 1st vs 4th
-                { home: top8[0], away: top8[3], detailedResult: null, type: 'QF' },
-                // QF2: 2nd vs 3rd
-                { home: top8[1], away: top8[2], detailedResult: null, type: 'QF' },
-                // EF1: 5th vs 8th
-                { home: top8[4], away: top8[7], detailedResult: null, type: 'EF' },
-                // EF2: 6th vs 7th
-                { home: top8[5], away: top8[6], detailedResult: null, type: 'EF' }
-            ],
-            byes: []
-        };
-        finalsFixture.push(week1);
-        
-        seasonState.finalsFixture = finalsFixture;
-        seasonState.currentRound = 0;
-        seasonState.viewedRound = 0;
-        renderFixture();
-    }
-    
-    function calculateAndDisplayAwards() {
-        const awardsContent = document.getElementById('awardsContent');
-        awardsContent.innerHTML = ''; // Clear previous content
-
-        // --- 1. Coleman Medal ---
-        const goalTally = {};
-        // Use the final seasonStats instead of recalculating
-        for(const playerName in seasonStats) {
-            goalTally[playerName] = seasonStats[playerName].goals;
-        }
-        const sortedGoals = Object.entries(goalTally).sort(([,a], [,b]) => b - a);
-        const colemanWinner = sortedGoals[0];
-        let colemanHTML = `<div class="bg-gray-700/50 p-4 rounded-lg"><h3 class="text-2xl font-bold text-indigo-400 mb-2">Coleman Medal</h3><p class="text-xl">${colemanWinner[0]} (${playerTeamMap[colemanWinner[0]]}) - <strong>${colemanWinner[1]} goals</strong></p></div>`;
-        
-        // --- 2. Brownlow Medal ---
-        const brownlowTally = {};
-        seasonState.fixture.forEach(round => {
-            round.matches.forEach(match => {
-                if (match.detailedResult && match.detailedResult.votes) {
-                    const votes = match.detailedResult.votes;
-                    brownlowTally[votes.three] = (brownlowTally[votes.three] || 0) + 3;
-                    brownlowTally[votes.two] = (brownlowTally[votes.two] || 0) + 2;
-                    brownlowTally[votes.one] = (brownlowTally[votes.one] || 0) + 1;
-                }
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
             });
         });
-        const sortedBrownlow = Object.entries(brownlowTally).sort(([,a], [,b]) => b - a);
-        const brownlowWinner = sortedBrownlow[0];
-        let brownlowHTML = `<div class="bg-gray-700/50 p-4 rounded-lg"><h3 class="text-2xl font-bold text-indigo-400 mb-2">Brownlow Medal</h3><p class="text-xl">${brownlowWinner[0]} (${playerTeamMap[brownlowWinner[0]]}) - <strong>${brownlowWinner[1]} votes</strong></p><h4 class="font-semibold mt-3 mb-1">Leaderboard:</h4><ol class="list-decimal list-inside">`;
-        sortedBrownlow.slice(0, 5).forEach(p => {
-            brownlowHTML += `<li>${p[0]} (${playerTeamMap[p[0]]}) - ${p[1]} votes</li>`;
-        });
-        brownlowHTML += `</ol></div>`;
 
-        // --- 3. All-Australian Team ---
-        const playerPerformance = {};
-        const allPlayers = Object.values(teams).flatMap(team => team.players);
-
-        allPlayers.forEach(player => {
-            const pStats = seasonStats[player.name] || { disposals: 0, goals: 0};
-            playerPerformance[player.name] = {
-                disposals: pStats.disposals,
-                goals: pStats.goals,
-                position: player.position,
-                name: player.name
-            };
-        });
-
-        Object.values(playerPerformance).forEach(player => {
-            player.score = player.disposals + (player.goals * 5); // Performance score
-        });
-
-        const forwards = Object.values(playerPerformance).filter(p => p.position.includes('Forward'));
-        const midfielders = Object.values(playerPerformance).filter(p => p.position.includes('Midfield') || p.position.includes('Utility'));
-        const defenders = Object.values(playerPerformance).filter(p => p.position.includes('Defence'));
-        const rucks = Object.values(playerPerformance).filter(p => p.position.includes('Ruck'));
-
-        forwards.sort((a,b) => b.score - a.score);
-        midfielders.sort((a,b) => b.score - a.score);
-        defenders.sort((a,b) => b.score - a.score);
-        rucks.sort((a,b) => b.score - a.score);
-
-        const aaTeam = {
-            fullBack: defenders.slice(0, 2),
-            halfBack: defenders.slice(2, 4),
-            centre: midfielders.slice(0, 3),
-            halfForward: forwards.slice(0, 2),
-            fullForward: forwards.slice(2, 4),
-            ruck: rucks.slice(0, 1)
-        };
-        const startingTeamNames = Object.values(aaTeam).flat().map(p => p.name);
-        const allPerfPlayers = Object.values(playerPerformance);
-        const interchangePool = allPerfPlayers.filter(p => !startingTeamNames.includes(p.name));
-        interchangePool.sort((a,b) => b.score - a.score);
-        aaTeam.interchange = interchangePool.slice(0, 8); // Select 8 for the bench
-
-        let aaHTML = `<div class="bg-gray-700/50 p-4 rounded-lg"><h3 class="text-2xl font-bold text-indigo-400 mb-2">All-Australian Team</h3><div class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-2 text-sm">`;
-        const addPositionToHtml = (pos, players) => {
-            let html = `<div><strong class="uppercase">${pos}</strong>`;
-            players.forEach(p => {html += `<p>${p.name} (${playerTeamMap[p.name]})</p>`});
-            html += `</div>`;
-            return html;
-        };
-        aaHTML += addPositionToHtml("Full Back", aaTeam.fullBack);
-        aaHTML += addPositionToHtml("Half Back", aaTeam.halfBack);
-        aaHTML += addPositionToHtml("Centre", aaTeam.centre);
-        aaHTML += addPositionToHtml("Half Forward", aaTeam.halfForward);
-        aaHTML += addPositionToHtml("Full Forward", aaTeam.fullForward);
-        aaHTML += addPositionToHtml("Ruck", aaTeam.ruck);
-        aaHTML += addPositionToHtml("Interchange", aaTeam.interchange);
-        aaHTML += `</div></div>`;
-
-
-        // --- 4. Display ---
-        awardsContent.innerHTML = brownlowHTML + colemanHTML + aaHTML;
-        document.getElementById('awardsContainer').classList.remove('hidden');
-    }
-
-    function updateSeasonStats(detailedResult) {
-        if (!detailedResult || !detailedResult.stats) return;
-
-        for (const playerName in detailedResult.stats) {
-            if (!seasonStats[playerName]) {
-                seasonStats[playerName] = { games: 0, goals: 0, disposals: 0 };
-            }
-            const gameStats = detailedResult.stats[playerName];
-            seasonStats[playerName].games += 1;
-            seasonStats[playerName].goals += gameStats.goals;
-            seasonStats[playerName].disposals += gameStats.disposals;
-        }
-    }
-
-    function updateStatTrackers() {
-        const container = document.getElementById('statTrackerContainer');
-        if (!seasonStats) {
-            container.innerHTML = '';
-            return;
-        }
-
-        const players = Object.entries(seasonStats);
-
-        // Top Goal Scorers
-        const sortedGoals = players.sort(([,a], [,b]) => b.goals - a.goals).slice(0, 5);
-        let goalsHTML = `<div><h4 class="font-bold text-indigo-400">Top Goal Scorers</h4><ol class="list-decimal list-inside">`;
-        sortedGoals.forEach(([name, stats]) => {
-            goalsHTML += `<li>${name} (${playerTeamMap[name]}) - ${stats.goals}</li>`;
-        });
-        goalsHTML += `</ol></div>`;
-
-        // Top Disposals (Average)
-        const sortedDisposals = players.filter(([,stats]) => stats.games > 0)
-            .sort(([,a], [,b]) => (b.disposals / b.games) - (a.disposals / a.games))
-            .slice(0, 5);
-        
-        let disposalsHTML = `<div><h4 class="font-bold text-indigo-400">Top Disposals (Avg)</h4><ol class="list-decimal list-inside">`;
-        sortedDisposals.forEach(([name, stats]) => {
-            const avg = (stats.disposals / stats.games).toFixed(1);
-            disposalsHTML += `<li>${name} (${playerTeamMap[name]}) - ${avg}</li>`;
-        });
-        disposalsHTML += `</ol></div>`;
-
-        container.innerHTML = goalsHTML + disposalsHTML;
-    }
-
-
-    // --- INITIALIZATION & EVENT LISTENERS ---
-    document.addEventListener('DOMContentLoaded', () => {
-        populateTeamSelects();
-        
-        // Create the player-to-team mapping
-        for(const teamKey in teams) {
-            const team = teams[teamKey];
-            team.players.forEach(player => {
-                playerTeamMap[player.name] = team.initials;
-            });
-        }
-        
-        document.getElementById('simulateBtn').addEventListener('click', () => {
-             const homeTeamKey = homeTeamSelect.value;
-             const awayTeamKey = awayTeamSelect.value;
-             runSimulation(homeTeamKey, awayTeamKey, false);
-        });
-
-        const singleMatchContainer = document.getElementById('singleMatchContainer');
-        const seasonContainer = document.getElementById('seasonContainer');
-        const singleMatchModeBtn = document.getElementById('singleMatchModeBtn');
-        const seasonModeBtn = document.getElementById('seasonModeBtn');
-        
-        singleMatchModeBtn.addEventListener('click', () => {
-            singleMatchContainer.classList.remove('hidden');
-            seasonContainer.classList.add('hidden');
-            singleMatchModeBtn.classList.add('active');
-            seasonModeBtn.classList.remove('active');
-            document.getElementById('awardsContainer').classList.add('hidden');
-        });
-        seasonModeBtn.addEventListener('click', () => {
-            singleMatchContainer.classList.add('hidden');
-            seasonContainer.classList.remove('hidden');
-            seasonModeBtn.classList.add('active');
-            singleMatchModeBtn.classList.remove('active');
-            resultsContainer.classList.add('hidden');
-            document.getElementById('awardsContainer').classList.add('hidden');
-        });
-        
-        const startSeasonBtn = document.getElementById('startSeasonBtn');
-        const seasonControls = document.getElementById('seasonControls');
-        const fixtureContainer = document.getElementById('fixtureContainer');
-        const prevRoundBtn = document.getElementById('prevRoundBtn');
-        const nextRoundBtn = document.getElementById('nextRoundBtn');
-        const closeAwardsBtn = document.getElementById('closeAwardsBtn');
-        
-        startSeasonBtn.addEventListener('click', () => {
-            seasonState.fixture = generateFixture();
-            seasonState.ladder = initializeLadder();
-            seasonState.currentRound = 0;
-            seasonState.viewedRound = 0;
-            seasonState.mode = 'HOME_AND_AWAY';
-            seasonStats = {}; // Reset season stats
-            
-            renderLadder();
-            renderFixture();
-            updateStatTrackers(); // Show initial empty state
-            seasonControls.classList.remove('hidden');
-            simRoundBtn.disabled = false;
-            simRoundBtn.textContent = 'Simulate Round';
-            resultsContainer.classList.add('hidden');
-            document.getElementById('awardsContainer').classList.add('hidden');
-        });
-
-        fixtureContainer.addEventListener('click', handleFixtureClick);
-        simRoundBtn.addEventListener('click', handleSimRound);
-        closeAwardsBtn.addEventListener('click', () => {
-            document.getElementById('awardsContainer').classList.add('hidden');
-        });
-        
-        prevRoundBtn.addEventListener('click', () => {
-            if (seasonState.viewedRound > 0) {
-                seasonState.viewedRound--;
-                renderFixture();
-            }
-        });
-        nextRoundBtn.addEventListener('click', () => {
-             const lastRoundIndex = (seasonState.mode === 'HOME_AND_AWAY') ? seasonState.fixture.length - 1 : seasonState.finalsFixture.length - 1;
-             if (seasonState.viewedRound < seasonState.currentRound && seasonState.viewedRound < lastRoundIndex) {
-                seasonState.viewedRound++;
-                renderFixture();
-            }
-        });
-
-
-        commentaryTab.addEventListener('click', () => {
-            statsPanel.classList.add('hidden');
-            commentaryPanel.classList.remove('hidden');
-            statsTab.classList.remove('active');
-            commentaryTab.classList.add('active');
-        });
-
-        statsTab.addEventListener('click', () => {
-            commentaryPanel.classList.add('hidden');
-            statsPanel.classList.remove('hidden');
-            commentaryTab.classList.remove('active');
-            statsTab.classList.add('active');
-        });
-
-        const ladderTabBtn = document.getElementById('ladderTabBtn');
-        const leadersTabBtn = document.getElementById('leadersTabBtn');
-
-        ladderTabBtn.addEventListener('click', () => {
-            ladderContainer.classList.remove('hidden');
-            statTrackerContainer.classList.add('hidden');
-            ladderTabBtn.classList.add('active');
-            leadersTabBtn.classList.remove('active');
-        });
-
-        leadersTabBtn.addEventListener('click', () => {
-            ladderContainer.classList.add('hidden');
-            statTrackerContainer.classList.remove('hidden');
-            ladderTabBtn.classList.remove('active');
-            leadersTabBtn.classList.add('active');
-        });
-    });
-
+        // NOTE: The previous JavaScript for form handling has been removed.
+        // Form submission is now handled by the 'action' attribute on the <form> element,
+        // which sends the data to FormSubmit.co.
     </script>
+
 </body>
 </html>
